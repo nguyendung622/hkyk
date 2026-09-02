@@ -11,6 +11,7 @@ const PROVINCES = [
   { value: 'Da Nang',     label: 'Đà Nẵng' },
   { value: 'Dac Lac',     label: 'Đắk Lắk' },
   { value: 'Dac Nong',    label: 'Đắk Nông' },
+  { value: 'Dong Nai',    label: 'Đồng Nai' },
   { value: 'Gia Lai',     label: 'Gia Lai' },
   { value: 'Ha Noi',      label: 'Hà Nội' },
   { value: 'Ho Chi Minh', label: 'Hồ Chí Minh' },
@@ -23,5 +24,6 @@ const PROVINCES = [
   { value: 'Quang Binh',  label: 'Quảng Bình' },
   { value: 'Quang Nam',   label: 'Quảng Nam' },
   { value: 'Quang Ngai',  label: 'Quảng Ngãi' },
-  { value: 'Quang Tri',   label: 'Quảng Trị' }
+  { value: 'Quang Tri',   label: 'Quảng Trị' },
+  { value: 'Vinh Long',   label: 'Vĩnh Long' }
 ];
