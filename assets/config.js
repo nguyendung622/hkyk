@@ -7,7 +7,7 @@
  * nhưng không gửi đi đâu cả.
  */
 var CONFIG = {
-  APPS_SCRIPT_URL: '',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbw7_a16ABX5WNUO3vocHZ5ZZ8cyJXQGulOew_g45ROsbJdzDJKLeL0vQmanDS2dNGSCQw/exec',
   FORM_TITLE: 'Hội Khoa Y Khoa Huế - 2027',
   FORM_SUBTITLE: 'Phiếu đăng ký tham dự'
 };
