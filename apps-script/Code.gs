@@ -25,12 +25,16 @@ var HEADERS = [
 
 var COL_WIDTHS = [40, 105, 175, 55, 55, 55, 120, 45, 50, 60, 90, 60, 110, 105, 200];
 
+// Giữ giống hệt danh sách trong assets/provinces.js
 var PROVINCES = [
   'Bình Định', 'Bình Phước', 'Bình Thuận', 'Bà Rịa - Vũng Tàu', 'Đà Nẵng',
-  'Đắk Lắk', 'Đắk Nông', 'Gia Lai', 'Hà Nội', 'Hồ Chí Minh', 'Huế',
-  'Khánh Hòa', 'Kon Tum', 'Lâm Đồng', 'Ninh Thuận', 'Phú Yên', 'Quảng Bình',
-  'Quảng Nam', 'Quảng Ngãi', 'Quảng Trị'
+  'Đắk Lắk', 'Đắk Nông', 'Đồng Nai', 'Gia Lai', 'Hà Nội', 'Hồ Chí Minh',
+  'Huế', 'Khánh Hòa', 'Kon Tum', 'Lâm Đồng', 'Ninh Thuận', 'Phú Yên',
+  'Quảng Bình', 'Quảng Nam', 'Quảng Ngãi', 'Quảng Trị', 'Vĩnh Long'
 ];
+
+var PROVINCE_COL = 28;  // cột AB — nguồn cho dropdown, giống file export.xlsm
+var PROVINCE_MAX = 60;  // số dòng dọn dẹp khi danh sách rút ngắn
 
 /* ===================== Điểm vào ===================== */
 
@@ -206,6 +210,7 @@ function getSheet_() {
 function setup() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(SHEET_NAME) || buildSheet_(ss);
+  writeProvinceList_(sheet);
   applyValidation_(sheet);
   Logger.log('Đã chuẩn bị xong sheet "%s".', SHEET_NAME);
   return sheet.getName();
@@ -229,14 +234,19 @@ function buildSheet_(ss) {
   COL_WIDTHS.forEach(function (w, i) { sheet.setColumnWidth(i + 1, w); });
   sheet.setFrozenRows(HEADER_ROW);
 
-  // Danh sách tỉnh thành để làm nguồn cho dropdown (cột AB, giống file gốc)
-  sheet.getRange('AB7').setValue('Tỉnh thành').setFontWeight('bold');
-  sheet.getRange(8, 28, PROVINCES.length, 1)
-       .setValues(PROVINCES.map(function (p) { return [p]; }));
+  writeProvinceList_(sheet);
   sheet.hideColumns(16, 13); // ẩn P..AB như file export.xlsm
 
   applyValidation_(sheet);
   return sheet;
+}
+
+/** Ghi (hoặc ghi đè) danh sách tỉnh thành ở cột AB — nguồn của dropdown. */
+function writeProvinceList_(sheet) {
+  sheet.getRange('AB7').setValue('Tỉnh thành').setFontWeight('bold');
+  sheet.getRange(FIRST_DATA_ROW, PROVINCE_COL, PROVINCE_MAX, 1).clearContent();
+  sheet.getRange(FIRST_DATA_ROW, PROVINCE_COL, PROVINCES.length, 1)
+       .setValues(PROVINCES.map(function (p) { return [p]; }));
 }
 
 function applyValidation_(sheet) {
@@ -247,7 +257,7 @@ function applyValidation_(sheet) {
   sheet.getRange(FIRST_DATA_ROW, 12, n, 1).setDataValidation(gioiTinh);
 
   var tinh = SpreadsheetApp.newDataValidation()
-    .requireValueInRange(sheet.getRange(8, 28, PROVINCES.length, 1), true)
+    .requireValueInRange(sheet.getRange(FIRST_DATA_ROW, PROVINCE_COL, PROVINCES.length, 1), true)
     .setAllowInvalid(true).build();
   sheet.getRange(FIRST_DATA_ROW, 7, n, 1).setDataValidation(tinh);
 }
