@@ -56,7 +56,7 @@ function doGet() {
   var sheet = getSheet_();
   return json({
     ok: true,
-    service: 'Đăng ký ' + TITLE_TEXT,
+    service: TITLE_TEXT,
     sheet: SHEET_NAME,
     soPhieu: countRegistrations_(sheet)
   });
