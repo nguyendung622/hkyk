@@ -1,0 +1,316 @@
+:root {
+  --ink:        #16211f;
+  --ink-soft:   #4d5f5c;
+  --ink-faint:  #7b8c89;
+  --line:       #dfe6e4;
+  --line-soft:  #edf1f0;
+  --bg:         #f5f7f6;
+  --surface:    #ffffff;
+  --brand:      #0f5c52;
+  --brand-dark: #0a423b;
+  --brand-tint: #e8f2f0;
+  --accent:     #b3892f;
+  --danger:     #b0392c;
+  --danger-bg:  #fdeceb;
+  --ok:         #146b4f;
+  --radius:     14px;
+  --shadow:     0 1px 2px rgba(16,32,29,.05), 0 8px 24px rgba(16,32,29,.06);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { width: min(920px, 100% - 2rem); margin-inline: auto; }
+
+/* ---------- Header ---------- */
+.site-header {
+  background: linear-gradient(160deg, var(--brand-dark), var(--brand) 70%);
+  color: #fff;
+  padding: 2.75rem 0 2.25rem;
+  border-bottom: 4px solid var(--accent);
+}
+.eyebrow {
+  margin: 0 0 .35rem;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #cfe3df;
+}
+.site-header h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 4.2vw, 2.3rem);
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+.lede {
+  margin: .75rem 0 0;
+  max-width: 46rem;
+  color: #d8e8e5;
+  font-size: .96rem;
+}
+
+/* ---------- Card ---------- */
+main { padding: 1.75rem 0 3rem; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.card-head {
+  display: flex;
+  gap: .85rem;
+  align-items: flex-start;
+  padding-bottom: 1.1rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.step {
+  flex: none;
+  width: 1.9rem; height: 1.9rem;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--brand-tint);
+  color: var(--brand);
+  font-weight: 700;
+  font-size: .95rem;
+}
+.card-head h2 { margin: 0; font-size: 1.12rem; font-weight: 600; }
+.hint { margin: .2rem 0 0; font-size: .87rem; color: var(--ink-faint); }
+
+/* ---------- Fields ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem .9rem;
+}
+.field { grid-column: span 2; display: flex; flex-direction: column; }
+.span-2 { grid-column: span 2; }
+.span-4 { grid-column: 1 / -1; }
+
+label {
+  font-size: .875rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: .35rem;
+}
+.req { color: var(--danger); font-weight: 700; }
+
+input, select, textarea {
+  font: inherit;
+  font-size: .95rem;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: .6rem .7rem;
+  width: 100%;
+  transition: border-color .15s, box-shadow .15s;
+}
+textarea { resize: vertical; }
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(15,92,82,.13);
+}
+input.invalid, select.invalid {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+}
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237b8c89' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .7rem center;
+  padding-right: 2rem;
+}
+
+.err {
+  margin: .3rem 0 0;
+  font-size: .8rem;
+  color: var(--danger);
+  min-height: 0;
+}
+.err:empty { display: none; }
+
+/* Ngày / tháng / năm */
+.dob { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: .5rem; max-width: 26rem; }
+
+.radios { display: flex; flex-wrap: wrap; gap: .5rem; }
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  margin: 0;
+  padding: .5rem .75rem;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: .9rem;
+  color: var(--ink);
+  font-weight: 400;
+  background: #fff;
+}
+.radio input { width: auto; margin: 0; accent-color: var(--brand); }
+.radio:has(input:checked) {
+  border-color: var(--brand);
+  background: var(--brand-tint);
+  font-weight: 500;
+}
+
+/* ---------- Người đi kèm ---------- */
+.companions { display: flex; flex-direction: column; gap: 1rem; }
+.companion {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 11px;
+  padding: 1.1rem;
+  background: #fcfdfd;
+}
+.companion-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .9rem;
+}
+.companion-head h3 {
+  margin: 0;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+.empty {
+  margin: 0;
+  padding: 1.1rem;
+  text-align: center;
+  color: var(--ink-faint);
+  font-size: .9rem;
+  border: 1px dashed var(--line);
+  border-radius: 11px;
+  background: #fcfdfd;
+}
+.empty[hidden] { display: none; }
+
+/* ---------- Buttons ---------- */
+.btn-primary, .btn-ghost, .btn-remove {
+  font: inherit;
+  font-weight: 600;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+  border: 1px solid var(--brand);
+  padding: .7rem 1.5rem;
+  font-size: .98rem;
+}
+.btn-primary:hover:not(:disabled) { background: var(--brand-dark); }
+.btn-primary:disabled { opacity: .6; cursor: progress; }
+
+.btn-ghost {
+  margin-top: 1rem;
+  background: #fff;
+  color: var(--brand);
+  border: 1px dashed var(--brand);
+  padding: .65rem 1.1rem;
+  font-size: .92rem;
+}
+.btn-ghost:hover { background: var(--brand-tint); }
+
+.btn-remove {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid transparent;
+  padding: .3rem .6rem;
+  font-size: .84rem;
+}
+.btn-remove:hover { background: var(--danger-bg); border-color: #f0c9c5; }
+
+/* ---------- Tổng kết & gửi ---------- */
+.summary-card { position: sticky; bottom: 1rem; }
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.summary-label {
+  display: block;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--ink-faint);
+}
+.summary strong { font-size: 1.7rem; font-weight: 700; color: var(--brand); }
+.summary-note { margin-left: .5rem; font-size: .88rem; color: var(--ink-faint); }
+
+.form-msg { margin: .9rem 0 0; font-size: .9rem; }
+.form-msg:empty { display: none; }
+.form-msg.error { color: var(--danger); }
+.form-msg.ok    { color: var(--ok); }
+.form-msg.info  { color: var(--ink-faint); }
+
+/* ---------- Màn hình xong ---------- */
+.done { text-align: center; padding: 2.5rem 1.5rem; }
+.done[hidden] { display: none; }
+.done-mark {
+  width: 3rem; height: 3rem;
+  margin: 0 auto 1rem;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--brand-tint);
+  color: var(--brand);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.done h2 { margin: 0 0 .5rem; font-size: 1.3rem; }
+.done-detail { margin: 0 auto; max-width: 34rem; color: var(--ink-soft); font-size: .95rem; }
+.done-summary {
+  margin: 1.25rem auto 0;
+  max-width: 34rem;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 1rem 1.1rem;
+  background: #fcfdfd;
+  font-size: .9rem;
+  color: var(--ink-soft);
+}
+.done-summary dl { display: grid; grid-template-columns: auto 1fr; gap: .35rem .9rem; margin: 0; }
+.done-summary dt { color: var(--ink-faint); }
+.done-summary dd { margin: 0; color: var(--ink); font-weight: 500; }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 1.5rem 0;
+  background: #fff;
+}
+.site-footer p { margin: 0; font-size: .85rem; color: var(--ink-faint); text-align: center; }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+  .field, .span-2 { grid-column: 1 / -1; }
+  .card { padding: 1.15rem; }
+  .summary-card { position: static; }
+  .summary { flex-direction: column; align-items: stretch; }
+  .btn-primary { width: 100%; }
+}

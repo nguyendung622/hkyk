@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hội Khoa Y Khoa Huế - 2027 — Đăng ký tham dự</title>
+<meta name="description" content="Phiếu đăng ký tham dự Hội Khoa Y Khoa Huế - 2027">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <p class="eyebrow">Phiếu đăng ký tham dự</p>
+    <h1 id="formTitle">Hội Khoa Y Khoa Huế - 2027</h1>
+    <p class="lede">
+      Mỗi bác sĩ điền một phiếu. Nếu có người đi kèm (bạn cùng hội khóa hoặc
+      người trong gia đình), thêm từng người ở mục bên dưới.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <form id="regForm" novalidate>
+
+    <!-- ============ 1. BÁC SĨ THAM GIA ============ -->
+    <section class="card">
+      <header class="card-head">
+        <span class="step">1</span>
+        <div>
+          <h2>Thông tin bác sĩ tham gia</h2>
+          <p class="hint">Các ô có dấu <span class="req">*</span> là bắt buộc.</p>
+        </div>
+      </header>
+
+      <div class="grid">
+        <div class="field span-2">
+          <label for="hoTen">Họ và tên <span class="req">*</span></label>
+          <input type="text" id="hoTen" name="hoTen" autocomplete="name"
+                 placeholder="Ví dụ: Nguyễn Văn Bảo" required>
+          <p class="err" data-err-for="hoTen"></p>
+        </div>
+
+        <div class="field">
+          <label for="lop">Lớp <span class="req">*</span></label>
+          <input type="text" id="lop" name="lop" placeholder="Ví dụ: Y75A" required>
+          <p class="err" data-err-for="lop"></p>
+        </div>
+
+        <div class="field">
+          <label for="tinh">Tỉnh/Thành (địa chỉ cũ) <span class="req">*</span></label>
+          <select id="tinh" name="tinh" required>
+            <option value="">— Chọn tỉnh/thành —</option>
+          </select>
+          <p class="err" data-err-for="tinh"></p>
+        </div>
+
+        <div class="field">
+          <label for="sdt">Số điện thoại <span class="req">*</span></label>
+          <input type="tel" id="sdt" name="sdt" inputmode="tel" autocomplete="tel"
+                 placeholder="Ví dụ: 0905 123 456" required>
+          <p class="err" data-err-for="sdt"></p>
+        </div>
+
+        <div class="field span-4">
+          <label>Ngày tháng năm sinh</label>
+          <div class="dob" data-dob>
+            <select class="dob-day"   aria-label="Ngày sinh"></select>
+            <select class="dob-month" aria-label="Tháng sinh"></select>
+            <input class="dob-year" type="number" inputmode="numeric"
+                   min="1930" max="2030" placeholder="Năm" aria-label="Năm sinh">
+          </div>
+          <p class="err" data-err-for="dobChinh"></p>
+        </div>
+
+        <div class="field">
+          <label for="gioiTinh">Giới tính</label>
+          <select id="gioiTinh" name="gioiTinh">
+            <option value="">— Chọn —</option>
+            <option value="Nam">Nam</option>
+            <option value="Nữ">Nữ</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="cccd">CCCD / Hộ chiếu</label>
+          <input type="text" id="cccd" name="cccd" inputmode="numeric"
+                 placeholder="12 số CCCD hoặc số hộ chiếu">
+          <p class="err" data-err-for="cccd"></p>
+        </div>
+
+        <div class="field span-4">
+          <label for="ghiChu">Ghi chú</label>
+          <textarea id="ghiChu" name="ghiChu" rows="3"
+                    placeholder="Nguyện vọng về khách sạn, xe, ăn kiêng, ngày đến/đi…"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2. NGƯỜI ĐI KÈM ============ -->
+    <section class="card">
+      <header class="card-head">
+        <span class="step">2</span>
+        <div>
+          <h2>Danh sách người đi kèm</h2>
+          <p class="hint">
+            Có thể là người trong hội khóa hoặc người trong gia đình.
+            Không có người đi kèm thì bỏ qua mục này.
+          </p>
+        </div>
+      </header>
+
+      <div id="companionList" class="companions"></div>
+
+      <p id="noCompanion" class="empty">Chưa có người đi kèm nào.</p>
+
+      <button type="button" id="addCompanion" class="btn-ghost">
+        + Thêm người đi kèm
+      </button>
+    </section>
+
+    <!-- ============ 3. GỬI ============ -->
+    <section class="card summary-card">
+      <div class="summary">
+        <div>
+          <span class="summary-label">Tổng số thành viên</span>
+          <strong id="totalMembers">1</strong>
+          <span class="summary-note" id="totalNote">Bác sĩ tham gia</span>
+        </div>
+        <button type="submit" id="submitBtn" class="btn-primary">Gửi đăng ký</button>
+      </div>
+      <p id="formMsg" class="form-msg" role="status" aria-live="polite"></p>
+    </section>
+
+  </form>
+
+  <!-- ============ MÀN HÌNH THÀNH CÔNG ============ -->
+  <section id="doneScreen" class="card done" hidden>
+    <div class="done-mark">✓</div>
+    <h2>Đã ghi nhận đăng ký</h2>
+    <p id="doneDetail" class="done-detail"></p>
+    <div id="doneSummary" class="done-summary"></div>
+    <button type="button" id="againBtn" class="btn-ghost">Đăng ký cho người khác</button>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Hội Khoa Y Khoa Huế - 2027 · Mọi thắc mắc xin liên hệ ban tổ chức.</p>
+  </div>
+</footer>
+
+<!-- Khuôn mẫu một người đi kèm -->
+<template id="companionTpl">
+  <article class="companion" data-companion>
+    <header class="companion-head">
+      <h3><span class="c-index">1</span>. Người đi kèm</h3>
+      <button type="button" class="btn-remove" data-remove aria-label="Xóa người đi kèm này">Xóa</button>
+    </header>
+
+    <div class="grid">
+      <div class="field span-4">
+        <label>Quan hệ <span class="req">*</span></label>
+        <div class="radios">
+          <label class="radio">
+            <input type="radio" name="loai-__I__" value="Hội khóa" checked>
+            <span>Người trong hội khóa</span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="loai-__I__" value="Gia đình">
+            <span>Người trong gia đình</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Họ và tên <span class="req">*</span></label>
+        <input type="text" class="c-hoTen" placeholder="Họ và tên người đi kèm" required>
+        <p class="err" data-err-for="c-hoTen"></p>
+      </div>
+
+      <div class="field">
+        <label>CCCD / Hộ chiếu</label>
+        <input type="text" class="c-cccd" inputmode="numeric" placeholder="12 số CCCD hoặc hộ chiếu">
+        <p class="err" data-err-for="c-cccd"></p>
+      </div>
+
+      <div class="field span-2">
+        <label>Ngày tháng năm sinh</label>
+        <div class="dob" data-dob>
+          <select class="dob-day"   aria-label="Ngày sinh"></select>
+          <select class="dob-month" aria-label="Tháng sinh"></select>
+          <input class="dob-year" type="number" inputmode="numeric"
+                 min="1930" max="2030" placeholder="Năm" aria-label="Năm sinh">
+        </div>
+        <p class="err" data-err-for="c-dob"></p>
+      </div>
+
+      <div class="field">
+        <label>Giới tính</label>
+        <select class="c-gioiTinh">
+          <option value="">— Chọn —</option>
+          <option value="Nam">Nam</option>
+          <option value="Nữ">Nữ</option>
+        </select>
+      </div>
+    </div>
+  </article>
+</template>
+
+<script src="assets/config.js"></script>
+<script src="assets/provinces.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
