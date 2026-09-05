@@ -138,6 +138,22 @@ select {
   padding-right: 2rem;
 }
 
+/* Ô vừa chọn được vừa gõ tay được (input + datalist) — cho giống hệt select */
+input[list] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237b8c89' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .7rem center;
+  padding-right: 2rem;
+}
+/* Ẩn mũi tên mặc định của Chrome nhưng giữ vùng bấm để mở danh sách */
+input[list]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-right: -.35rem;
+  cursor: pointer;
+}
+
 .err {
   margin: .3rem 0 0;
   font-size: .8rem;

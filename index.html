@@ -47,15 +47,15 @@
 
         <div class="field">
           <label for="lop">Lớp <span class="req">*</span></label>
-          <input type="text" id="lop" name="lop" placeholder="Ví dụ: Y75A" required>
+          <input type="text" id="lop" name="lop" placeholder="A - B - C - D" required>
           <p class="err" data-err-for="lop"></p>
         </div>
 
         <div class="field">
           <label for="tinh">Nơi ở hiện nay (địa chỉ cũ) <span class="req">*</span></label>
-          <select id="tinh" name="tinh" required>
-            <option value="">— Chọn tỉnh/thành —</option>
-          </select>
+          <input type="text" id="tinh" name="tinh" list="tinhList" required
+                 autocomplete="off" placeholder="Chọn trong danh sách hoặc tự gõ">
+          <datalist id="tinhList"></datalist>
           <p class="err" data-err-for="tinh"></p>
         </div>
 
@@ -96,7 +96,7 @@
         <div class="field span-4">
           <label for="ghiChu">Ghi chú</label>
           <textarea id="ghiChu" name="ghiChu" rows="3"
-                    placeholder="Nguyện vọng về khách sạn, xe, ăn kiêng, ngày đến/đi…"></textarea>
+                    placeholder="Nguyện vọng ở chung phòng với ai ? Ăn chay ? Đến sớm- ngày? Về trễ-ngày? (Nếu muốn ở cùng KS của Hội Khoá)"></textarea>
         </div>
       </div>
     </section>

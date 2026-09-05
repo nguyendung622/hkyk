@@ -26,13 +26,13 @@
   document.title = CONFIG.FORM_TITLE + ' — Đăng ký tham dự';
   $('#formTitle').textContent = CONFIG.FORM_TITLE;
 
-  const tinhSelect = $('#tinh');
+  // Tỉnh/thành: gợi ý sẵn 20+ mục nhưng vẫn cho gõ tay giá trị khác
+  const tinhInput = $('#tinh');
+  const tinhList = $('#tinhList');
   PROVINCES.forEach(p => {
     const opt = document.createElement('option');
     opt.value = p.label;          // ghi tên có dấu vào Excel
-    opt.textContent = p.label;
-    opt.dataset.raw = p.value;    // giữ lại tên gốc không dấu
-    tinhSelect.appendChild(opt);
+    tinhList.appendChild(opt);
   });
 
   function fillDob(box) {
@@ -143,8 +143,8 @@
     const lop = $('#lop').value.trim();
     if (!lop) bad($('#lop'), 'lop', 'Vui lòng nhập lớp.');
 
-    const tinh = tinhSelect.value;
-    if (!tinh) bad(tinhSelect, 'tinh', 'Vui lòng chọn tỉnh/thành.');
+    const tinh = tinhInput.value.trim();
+    if (!tinh) bad(tinhInput, 'tinh', 'Vui lòng chọn hoặc nhập nơi ở hiện nay.');
 
     const sdt = $('#sdt').value.trim();
     const ePhone = checkPhone(sdt);
@@ -254,7 +254,7 @@
     const rows = [
       ['Họ và tên', payload.hoTen],
       ['Lớp', payload.lop],
-      ['Tỉnh/Thành', payload.tinh],
+      ['Nơi ở hiện nay', payload.tinh],
       ['Số điện thoại', payload.sdt],
       ['Số thành viên', String(1 + payload.nguoiDiKem.length)]
     ];
