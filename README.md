@@ -22,25 +22,28 @@ Trình duyệt (GitHub Pages)  ──POST JSON──>  Apps Script Web App  ─�
 
 ## Bố cục dữ liệu ghi ra Excel
 
-Sheet `dang ky Hoi khoa Hue`, tiêu đề ở dòng 7, dữ liệu từ dòng 8:
+Sheet `dang ky Hoi khoa Hue`, tiêu đề ở dòng 7, dữ liệu từ dòng 8. Bố cục dựa
+trên `export.xlsm` nhưng **đã bỏ hai cột Ngày và Tháng sinh** — chỉ giữ Năm sinh.
 
-| Cột | Nội dung | Dòng bác sĩ | Dòng người đi kèm |
+| Cột | Nội dung | Dòng bác sĩ đăng ký | Dòng người đi kèm |
 |---|---|---|---|
 | A | STT | số thứ tự phiếu | để trống |
 | B | Ngày đăng ký | thời điểm gửi | thời điểm gửi |
 | C | Họ tên | họ tên bác sĩ | họ tên người đi kèm |
-| D | Người đi kèm | để trống | `1` |
-| E | Lớp | lớp của bác sĩ | để trống |
+| D | Người đi kèm | để trống | `1` nếu là **người thân**; để trống nếu là **bác sĩ trong hội khóa** |
+| E | Lớp | ✓ | để trống |
 | F | Số thành viên | 1 + số người đi kèm | để trống |
-| G | Tỉnh Thành (địa chỉ cũ) | tên có dấu | để trống |
-| H, I, J | Ngày / Tháng / Năm sinh | ✓ | ✓ |
-| K | Năm sinh | `=IF(OR(J…),"",DATE(J,I,H))` | như bên trái |
-| L | Giới tính | ✓ | ✓ |
-| M | CCCD / Hộ chiếu | ✓ | ✓ |
-| N | Số điện thoại | ✓ | để trống |
-| O | Ghi chú | ghi chú của bác sĩ | `Hội khóa` hoặc `Gia đình` |
+| G | Tỉnh Thành (địa chỉ cũ) | ✓ | để trống |
+| H | Năm sinh | ✓ | ✓ |
+| I | Giới tính | ✓ (bắt buộc) | ✓ (bắt buộc) |
+| J | CCCD / Hộ chiếu | ✓ | ✓ |
+| K | Số điện thoại | ✓ | để trống |
+| L | Ghi chú | đúng nội dung người dùng gõ | **luôn để trống** |
 
 Một phiếu = 1 dòng bác sĩ + n dòng người đi kèm ngay bên dưới.
+
+Vì bác sĩ trong hội khóa đi kèm cũng để trống cột D, mốc nhận biết đầu mỗi
+phiếu là **cột F "Số thành viên"** — chỉ dòng bác sĩ đăng ký mới có giá trị.
 
 ## Triển khai — 4 bước
 

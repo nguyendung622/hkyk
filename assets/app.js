@@ -35,22 +35,12 @@
     tinhList.appendChild(opt);
   });
 
-  function fillDob(box) {
-    const day = $('.dob-day', box), month = $('.dob-month', box);
-    day.innerHTML   = '<option value="">Ngày</option>';
-    month.innerHTML = '<option value="">Tháng</option>';
-    for (let d = 1; d <= 31; d++) day.add(new Option(String(d), String(d)));
-    for (let m = 1; m <= 12; m++) month.add(new Option('Tháng ' + m, String(m)));
-  }
-  $$('[data-dob]').forEach(fillDob);
-
   /* ---------- Người đi kèm ---------- */
 
   function addCompanion() {
     const node = tpl.content.firstElementChild.cloneNode(true);
     const i = ++companionSeq;
     $$('input[type="radio"]', node).forEach(r => { r.name = 'loai-' + i; });
-    fillDob($('[data-dob]', node));
     $('[data-remove]', node).addEventListener('click', () => {
       node.remove();
       renumber();
@@ -106,23 +96,12 @@
     return '';
   }
 
-  function readDob(box) {
-    const d = $('.dob-day', box).value;
-    const m = $('.dob-month', box).value;
-    const y = ($('.dob-year', box).value || '').trim();
-    return { ngay: d, thang: m, nam: y };
-  }
-
-  function checkDob(dob) {
-    const filled = [dob.ngay, dob.thang, dob.nam].filter(Boolean).length;
-    if (filled === 0) return '';                          // bỏ trống cũng được
-    if (filled < 3) return 'Nhập đủ cả ngày, tháng và năm sinh (hoặc bỏ trống cả ba).';
-    const y = Number(dob.nam);
+  function checkYear(v) {
+    const s = (v || '').trim();
+    if (!s) return '';                                   // không bắt buộc
+    const y = Number(s);
     if (!Number.isInteger(y) || y < 1930 || y > new Date().getFullYear())
       return 'Năm sinh không hợp lệ.';
-    const dt = new Date(y, Number(dob.thang) - 1, Number(dob.ngay));
-    if (dt.getMonth() !== Number(dob.thang) - 1 || dt.getDate() !== Number(dob.ngay))
-      return 'Ngày sinh không có thật.';
     return '';
   }
 
@@ -150,21 +129,28 @@
     const ePhone = checkPhone(sdt);
     if (ePhone) bad($('#sdt'), 'sdt', ePhone);
 
+    const gioiTinh = $('#gioiTinh').value;
+    if (!gioiTinh) bad($('#gioiTinh'), 'gioiTinh', 'Vui lòng chọn giới tính.');
+
     const cccd = $('#cccd').value.trim();
     const eId = checkId(cccd);
     if (eId) bad($('#cccd'), 'cccd', eId);
 
-    const dob = readDob($('#regForm [data-dob]'));
-    const eDob = checkDob(dob);
-    if (eDob) bad(null, 'dobChinh', eDob);
+    const namSinh = $('#namSinh').value.trim();
+    const eYear = checkYear(namSinh);
+    if (eYear) bad($('#namSinh'), 'namSinh', eYear);
 
     const nguoiDiKem = $$('[data-companion]', listEl).map((row, idx) => {
       const ten = $('.c-hoTen', row).value.trim();
       if (!ten) bad($('.c-hoTen', row), 'c-hoTen', `Nhập họ tên người đi kèm thứ ${idx + 1}.`, row);
 
-      const cDob = readDob($('[data-dob]', row));
-      const eCDob = checkDob(cDob);
-      if (eCDob) bad(null, 'c-dob', eCDob, row);
+      const cGt = $('.c-gioiTinh', row).value;
+      if (!cGt) bad($('.c-gioiTinh', row), 'c-gioiTinh',
+                    `Chọn giới tính cho người đi kèm thứ ${idx + 1}.`, row);
+
+      const cYear = $('.c-namSinh', row).value.trim();
+      const eCYear = checkYear(cYear);
+      if (eCYear) bad($('.c-namSinh', row), 'c-namSinh', eCYear, row);
 
       const cId = $('.c-cccd', row).value.trim();
       const eCId = checkId(cId);
@@ -174,8 +160,8 @@
       return {
         hoTen: ten,
         loai: loaiEl ? loaiEl.value : 'Hội khóa',
-        ngay: cDob.ngay, thang: cDob.thang, nam: cDob.nam,
-        gioiTinh: $('.c-gioiTinh', row).value,
+        namSinh: cYear,
+        gioiTinh: cGt,
         cccd: cId
       };
     });
@@ -184,9 +170,7 @@
       ok: errors.length === 0,
       firstBad,
       payload: {
-        hoTen, lop, tinh, sdt, cccd,
-        gioiTinh: $('#gioiTinh').value,
-        ngay: dob.ngay, thang: dob.thang, nam: dob.nam,
+        hoTen, lop, tinh, sdt, cccd, gioiTinh, namSinh,
         ghiChu: $('#ghiChu').value.trim(),
         nguoiDiKem
       }
