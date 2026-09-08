@@ -33,7 +33,7 @@
         <span class="step">1</span>
         <div>
           <h2>Thông tin bác sĩ tham gia</h2>
-          <p class="hint">Phần này bắt buộc điền đủ.</p>
+          <p class="hint">Bắt buộc với mục có dấu <span class="req">*</span></p>
         </div>
       </header>
 
@@ -75,6 +75,12 @@
           <datalist id="tinhList"></datalist>
           <p class="err" data-err-for="tinh"></p>
         </div>
+
+        <div class="field span-4">
+          <label for="ghiChu">Ghi chú</label>
+          <textarea id="ghiChu" name="ghiChu" rows="3"
+                    placeholder="Ăn chay ? Đến sớm- ngày nào ? Về trễ-ngày nào ? (Nếu muốn ở cùng KS của Hội Khoá)"></textarea>
+        </div>
       </div>
     </section>
 
@@ -84,7 +90,7 @@
         <span class="step">2</span>
         <div>
           <h2>Thông tin bổ sung</h2>
-          <p class="hint">Không bắt buộc — có thể bỏ trống.</p>
+          <p class="hint">Yêu cầu với BS sinh năm 1967 về trước</p>
         </div>
       </header>
 
@@ -93,7 +99,6 @@
           <label for="namSinh">Năm sinh</label>
           <input type="number" id="namSinh" name="namSinh" inputmode="numeric"
                  min="1930" max="2030" placeholder="Ví dụ: 1967">
-          <p class="note">Có năm sinh 1967 về trước</p>
           <p class="err" data-err-for="namSinh"></p>
         </div>
 
@@ -101,14 +106,7 @@
           <label for="cccd">CCCD / Hộ chiếu</label>
           <input type="text" id="cccd" name="cccd" inputmode="numeric"
                  placeholder="12 số CCCD hoặc số hộ chiếu">
-          <p class="note">Có năm sinh 1967 về trước</p>
           <p class="err" data-err-for="cccd"></p>
-        </div>
-
-        <div class="field span-4">
-          <label for="ghiChu">Ghi chú</label>
-          <textarea id="ghiChu" name="ghiChu" rows="3"
-                    placeholder="Nguyện vọng ở chung phòng với ai ? Ăn chay ? Đến sớm- ngày? Về trễ-ngày? (Nếu muốn ở cùng KS của Hội Khoá)"></textarea>
         </div>
       </div>
     </section>
@@ -181,7 +179,7 @@
         <div class="radios">
           <label class="radio">
             <input type="radio" name="loai-__I__" value="Hội khóa" checked>
-            <span>Bác sĩ trong hội khóa</span>
+            <span>Là BS khoá 86-92</span>
           </label>
           <label class="radio">
             <input type="radio" name="loai-__I__" value="Gia đình">
@@ -210,14 +208,12 @@
         <label>Năm sinh</label>
         <input type="number" class="c-namSinh" inputmode="numeric"
                min="1930" max="2030" placeholder="Ví dụ: 1967">
-        <p class="note">Có năm sinh 1967 về trước</p>
         <p class="err" data-err-for="c-namSinh"></p>
       </div>
 
       <div class="field">
         <label>CCCD / Hộ chiếu</label>
         <input type="text" class="c-cccd" inputmode="numeric" placeholder="12 số CCCD hoặc hộ chiếu">
-        <p class="note">Có năm sinh 1967 về trước</p>
         <p class="err" data-err-for="c-cccd"></p>
       </div>
     </div>
