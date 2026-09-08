@@ -9,7 +9,7 @@
  *     J CCCD/Hộ chiếu | K Số điện thoại | L Ghi chú
  *   - mỗi phiếu = 1 dòng bác sĩ + n dòng người đi kèm
  *   - cột D chỉ đánh số 1 cho người thân đi kèm; bác sĩ trong hội khóa
- *     đi cùng thì để trống
+ *     đi cùng thì để trống, và có thêm Lớp ở cột E
  *
  * Cách dùng: xem README.md ở thư mục gốc.
  */
@@ -102,6 +102,7 @@ function validate(p) {
     kem.push({
       hoTen: ten,
       loai: str(n.loai) || 'Hội khóa',
+      lop: str(n.lop),          // chỉ có với BS trong hội khóa
       namSinh: num(n.namSinh),
       gioiTinh: str(n.gioiTinh),
       cccd: str(n.cccd)
@@ -153,7 +154,7 @@ function writeRegistration(d) {
     // mang nội dung do người dùng tự nhập.
     d.nguoiDiKem.forEach(function (n) {
       rows.push([
-        '', now, n.hoTen, n.loai === 'Gia đình' ? 1 : '', '', '', '',
+        '', now, n.hoTen, n.loai === 'Gia đình' ? 1 : '', n.lop, '', '',
         n.namSinh, n.gioiTinh, n.cccd, '', ''
       ]);
     });

@@ -31,7 +31,7 @@ trên `export.xlsm` nhưng **đã bỏ hai cột Ngày và Tháng sinh** — ch�
 | B | Ngày đăng ký | thời điểm gửi | thời điểm gửi |
 | C | Họ tên | họ tên bác sĩ | họ tên người đi kèm |
 | D | Người đi kèm | để trống | `1` nếu là **người thân**; để trống nếu là **bác sĩ trong hội khóa** |
-| E | Lớp | ✓ | để trống |
+| E | Lớp | ✓ | lớp nếu là **BS khoá 86-92**; để trống nếu là người thân |
 | F | Số thành viên | 1 + số người đi kèm | để trống |
 | G | Tỉnh Thành (địa chỉ cũ) | ✓ | để trống |
 | H | Năm sinh | ✓ | ✓ |

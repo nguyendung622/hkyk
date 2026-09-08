@@ -40,7 +40,11 @@
   function addCompanion() {
     const node = tpl.content.firstElementChild.cloneNode(true);
     const i = ++companionSeq;
-    $$('input[type="radio"]', node).forEach(r => { r.name = 'loai-' + i; });
+    $$('input[type="radio"]', node).forEach(r => {
+      r.name = 'loai-' + i;
+      r.addEventListener('change', () => syncLoai(node));
+    });
+    syncLoai(node);
     $('[data-remove]', node).addEventListener('click', () => {
       node.remove();
       renumber();
@@ -48,6 +52,21 @@
     listEl.appendChild(node);
     renumber();
     $('.c-hoTen', node).focus();
+  }
+
+  /** Ô Lớp chỉ hiện khi người đi kèm là BS trong hội khóa. */
+  function syncLoai(row) {
+    const checked = $('input[type="radio"]:checked', row);
+    const laBacSi = !checked || checked.value === 'Hội khóa';
+    const lopWrap = $('[data-lop-wrap]', row);
+    lopWrap.hidden = !laBacSi;
+    // Quan hệ chiếm nửa hàng khi có ô Lớp bên cạnh, cả hàng khi không
+    $('[data-quanhe]', row).classList.toggle('span-4', !laBacSi);
+    if (!laBacSi) {
+      const lop = $('.c-lop', row);
+      lop.value = '';
+      setErr(lop, 'c-lop', '', row);
+    }
   }
 
   function renumber() {
@@ -144,6 +163,14 @@
       const ten = $('.c-hoTen', row).value.trim();
       if (!ten) bad($('.c-hoTen', row), 'c-hoTen', `Nhập họ tên người đi kèm thứ ${idx + 1}.`, row);
 
+      const loaiEl = $('input[type="radio"]:checked', row);
+      const loai = loaiEl ? loaiEl.value : 'Hội khóa';
+      const laBacSi = loai === 'Hội khóa';
+
+      const cLop = $('.c-lop', row).value.trim();
+      if (laBacSi && !cLop)
+        bad($('.c-lop', row), 'c-lop', `Nhập lớp cho người đi kèm thứ ${idx + 1}.`, row);
+
       const cGt = $('.c-gioiTinh', row).value;
       if (!cGt) bad($('.c-gioiTinh', row), 'c-gioiTinh',
                     `Chọn giới tính cho người đi kèm thứ ${idx + 1}.`, row);
@@ -156,10 +183,10 @@
       const eCId = checkId(cId);
       if (eCId) bad($('.c-cccd', row), 'c-cccd', eCId, row);
 
-      const loaiEl = $('input[type="radio"]:checked', row);
       return {
         hoTen: ten,
-        loai: loaiEl ? loaiEl.value : 'Hội khóa',
+        loai: loai,
+        lop: laBacSi ? cLop : '',
         namSinh: cYear,
         gioiTinh: cGt,
         cccd: cId
