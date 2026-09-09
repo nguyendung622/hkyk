@@ -202,14 +202,43 @@ function countRegistrations_(sheet) {
   return n;
 }
 
+/**
+ * Tô định dạng cho các dòng vừa ghi.
+ *
+ * Định dạng chỉ để nhìn cho dễ, KHÔNG được phép làm hỏng phiếu đăng ký.
+ * Nếu sheet đã được chuyển thành Bảng (Table) hoặc cột bị gán "loại cột"
+ * cố định thì Google chặn setNumberFormat và ném lỗi — khi đó dữ liệu đã
+ * ghi xong nhưng người đăng ký lại nhận thông báo thất bại rồi gửi lại,
+ * sinh ra phiếu trùng. Vì vậy mỗi bước định dạng chạy riêng và lỗi thì
+ * bỏ qua.
+ */
 function formatRows_(sheet, startRow, count) {
-  sheet.getRange(startRow, 2, count, 1).setNumberFormat('dd/mm/yyyy hh:mm');
-  sheet.getRange(startRow, COL_NAM_SINH, count, 1).setNumberFormat('0');
-  sheet.getRange(startRow, COL_CCCD, count, 2).setNumberFormat('@'); // CCCD & SĐT giữ dạng chữ
-  sheet.getRange(startRow, 1, count, LAST_COL)
-       .setVerticalAlignment('middle')
-       .setBorder(true, true, true, true, true, true, '#d9d9d9', SpreadsheetApp.BorderStyle.SOLID);
-  sheet.getRange(startRow, COL_GHI_CHU, count, 1).setWrap(true);
+  tryFormat_(function () {
+    sheet.getRange(startRow, 2, count, 1).setNumberFormat('dd/mm/yyyy hh:mm');
+  });
+  tryFormat_(function () {
+    sheet.getRange(startRow, COL_NAM_SINH, count, 1).setNumberFormat('0');
+  });
+  tryFormat_(function () {
+    // CCCD & SĐT giữ dạng chữ để không mất số 0 ở đầu
+    sheet.getRange(startRow, COL_CCCD, count, 2).setNumberFormat('@');
+  });
+  tryFormat_(function () {
+    sheet.getRange(startRow, 1, count, LAST_COL)
+         .setVerticalAlignment('middle')
+         .setBorder(true, true, true, true, true, true, '#d9d9d9', SpreadsheetApp.BorderStyle.SOLID);
+  });
+  tryFormat_(function () {
+    sheet.getRange(startRow, COL_GHI_CHU, count, 1).setWrap(true);
+  });
+}
+
+function tryFormat_(fn) {
+  try {
+    fn();
+  } catch (err) {
+    Logger.log('Bỏ qua lỗi định dạng: %s', err && err.message ? err.message : err);
+  }
 }
 
 /* ===================== Tạo / lấy sheet ===================== */
