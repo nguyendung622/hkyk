@@ -70,9 +70,14 @@
 
         <div class="field span-4">
           <label for="tinh">Nơi ở hiện nay (Tỉnh thành trước sáp nhập) <span class="req">*</span></label>
-          <input type="text" id="tinh" name="tinh" list="tinhList" required
-                 autocomplete="off" placeholder="Chọn trong danh sách hoặc tự gõ">
-          <datalist id="tinhList"></datalist>
+          <div class="combo" data-combo>
+            <input type="text" id="tinh" name="tinh" required autocomplete="off"
+                   role="combobox" aria-expanded="false" aria-autocomplete="list"
+                   placeholder="Chạm để chọn hoặc tự gõ">
+            <button type="button" class="combo-toggle" tabindex="-1"
+                    aria-label="Mở danh sách tỉnh/thành">▾</button>
+            <ul class="combo-panel" role="listbox" hidden></ul>
+          </div>
           <p class="err" data-err-for="tinh"></p>
         </div>
 
@@ -154,17 +159,6 @@
 </footer>
 
 <!-- Khuôn mẫu một người đi kèm -->
-<datalist id="quanHeList">
-  <option value="Vợ"></option>
-  <option value="Chồng"></option>
-  <option value="Con"></option>
-  <option value="Con dâu"></option>
-  <option value="Con rể"></option>
-  <option value="Cháu"></option>
-  <option value="Anh/Chị/Em"></option>
-  <option value="Bạn"></option>
-</datalist>
-
 <template id="companionTpl">
   <article class="companion" data-companion>
     <header class="companion-head">
@@ -195,8 +189,14 @@
 
       <div class="field" data-quanhe-wrap>
         <label>Mối quan hệ <span class="req">*</span></label>
-        <input type="text" class="c-quanHe" list="quanHeList"
-               autocomplete="off" placeholder="Vợ, chồng, con…">
+        <div class="combo" data-combo>
+          <input type="text" class="c-quanHe" autocomplete="off"
+                 role="combobox" aria-expanded="false" aria-autocomplete="list"
+                 placeholder="Vợ, chồng, con…">
+          <button type="button" class="combo-toggle" tabindex="-1"
+                  aria-label="Mở danh sách mối quan hệ">▾</button>
+          <ul class="combo-panel" role="listbox" hidden></ul>
+        </div>
         <p class="err" data-err-for="c-quanHe"></p>
       </div>
 

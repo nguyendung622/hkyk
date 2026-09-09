@@ -139,20 +139,67 @@ select {
   padding-right: 2rem;
 }
 
-/* Ô vừa chọn được vừa gõ tay được (input + datalist) — cho giống hệt select */
-input[list] {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237b8c89' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right .7rem center;
-  padding-right: 2rem;
-}
-/* Ẩn mũi tên mặc định của Chrome nhưng giữ vùng bấm để mở danh sách */
-input[list]::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  width: 1.7rem;
-  height: 1.7rem;
-  margin-right: -.35rem;
+/* ---------- Ô vừa chọn được vừa gõ tay được ----------
+   Tự dựng thay cho <datalist> vì iOS Safari gần như không dùng được. */
+.combo { position: relative; }
+.combo input { padding-right: 2.9rem; }
+
+.combo-toggle {
+  position: absolute;
+  top: 0; right: 0;
+  width: 2.9rem;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0 9px 9px 0;
+  color: var(--ink-faint);
+  font-size: .8rem;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.combo-toggle:active { background: var(--line-soft); }
+
+.combo-panel {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  margin: 0;
+  padding: .25rem;
+  list-style: none;
+  max-height: 16rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(16, 32, 29, .16);
+}
+.combo-panel[hidden] { display: none; }
+
+.combo-opt {
+  display: flex;
+  align-items: center;
+  min-height: 44px;            /* đủ lớn để chạm bằng ngón tay */
+  padding: .5rem .75rem;
+  border-radius: 7px;
+  font-size: .95rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.combo-opt:hover,
+.combo-opt.active {
+  background: var(--brand-tint);
+  color: var(--brand-dark);
+}
+.combo-empty {
+  padding: .7rem .75rem;
+  font-size: .88rem;
+  color: var(--ink-faint);
 }
 
 .err {
@@ -324,6 +371,8 @@ input[list]::-webkit-calendar-picker-indicator {
 
 /* ---------- Mobile ---------- */
 @media (max-width: 640px) {
+  /* dưới 16px thì iOS tự phóng to trang mỗi lần chạm vào ô nhập */
+  input, select, textarea { font-size: 16px; }
   .grid { grid-template-columns: 1fr 1fr; }
   .field, .span-2 { grid-column: 1 / -1; }
   .card { padding: 1.15rem; }

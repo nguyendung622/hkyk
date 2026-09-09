@@ -26,14 +26,111 @@
   document.title = CONFIG.FORM_TITLE + ' — Đăng ký tham dự';
   $('#formTitle').textContent = CONFIG.FORM_TITLE;
 
-  // Tỉnh/thành: gợi ý sẵn 20+ mục nhưng vẫn cho gõ tay giá trị khác
+  const QUAN_HE = ['Vợ', 'Chồng', 'Con', 'Con dâu', 'Con rể', 'Cháu',
+                  'Anh/Chị/Em', 'Bạn'];
+
+  /** Bỏ dấu để gõ "dak lak" vẫn tìm ra "Đắk Lắk". */
+  function khongDau(v) {
+    return String(v).normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
+  }
+
+  /**
+   * Ô vừa chọn trong danh sách vừa gõ tay được.
+   * Tự dựng thay cho <datalist> — trên iPhone datalist gần như không
+   * bấm được, mũi tên xổ chỉ là hình vẽ.
+   */
+  function makeCombo(input, options) {
+    const wrap = input.closest('[data-combo]');
+    const panel = $('.combo-panel', wrap);
+    const toggle = $('.combo-toggle', wrap);
+    let items = [];
+    let pos = -1;
+
+    function render(loc) {
+      const q = khongDau((loc || '').trim());
+      const list = q ? options.filter(o => khongDau(o).includes(q)) : options;
+      panel.innerHTML = '';
+      items = [];
+      pos = -1;
+      if (!list.length) {
+        const li = document.createElement('li');
+        li.className = 'combo-empty';
+        li.textContent = 'Không có trong danh sách — cứ gõ tên bạn muốn.';
+        panel.appendChild(li);
+        return;
+      }
+      list.forEach(o => {
+        const li = document.createElement('li');
+        li.className = 'combo-opt';
+        li.setAttribute('role', 'option');
+        li.textContent = o;
+        li.addEventListener('click', () => chon(o));
+        panel.appendChild(li);
+        items.push(li);
+      });
+    }
+
+    function mo(loc) {
+      render(loc);
+      panel.hidden = false;
+      input.setAttribute('aria-expanded', 'true');
+    }
+
+    function dong() {
+      panel.hidden = true;
+      input.setAttribute('aria-expanded', 'false');
+    }
+
+    function chon(v) {
+      input.value = v;
+      dong();
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function danhDau(i) {
+      items.forEach(el => el.classList.remove('active'));
+      if (i >= 0 && items[i]) {
+        items[i].classList.add('active');
+        items[i].scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    input.addEventListener('focus', () => mo(input.value));
+    input.addEventListener('input', () => mo(input.value));
+
+    // Bấm nút xổ thì không cho ô nhập nhận focus — trên điện thoại sẽ
+    // không bật bàn phím, người dùng chạm thẳng vào mục cần chọn.
+    toggle.addEventListener('pointerdown', ev => ev.preventDefault());
+    toggle.addEventListener('click', () => {
+      if (panel.hidden) mo(''); else dong();
+    });
+
+    input.addEventListener('keydown', ev => {
+      if (ev.key === 'Escape') { dong(); return; }
+      if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+        if (panel.hidden) { mo(input.value); return; }
+        ev.preventDefault();
+        if (!items.length) return;
+        pos = ev.key === 'ArrowDown'
+          ? (pos + 1) % items.length
+          : (pos - 1 + items.length) % items.length;
+        danhDau(pos);
+        return;
+      }
+      if (ev.key === 'Enter' && !panel.hidden && pos >= 0) {
+        ev.preventDefault();
+        chon(items[pos].textContent);
+      }
+    });
+
+    document.addEventListener('pointerdown', ev => {
+      if (!wrap.contains(ev.target)) dong();
+    });
+  }
+
   const tinhInput = $('#tinh');
-  const tinhList = $('#tinhList');
-  PROVINCES.forEach(p => {
-    const opt = document.createElement('option');
-    opt.value = p.label;          // ghi tên có dấu vào Excel
-    tinhList.appendChild(opt);
-  });
+  makeCombo(tinhInput, PROVINCES.map(p => p.label));
 
   /* ---------- Người đi kèm ---------- */
 
@@ -44,6 +141,7 @@
       r.name = 'loai-' + i;
       r.addEventListener('change', () => syncLoai(node));
     });
+    makeCombo($('.c-quanHe', node), QUAN_HE);
     syncLoai(node);
     $('[data-remove]', node).addEventListener('click', () => {
       node.remove();
