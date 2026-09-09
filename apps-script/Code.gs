@@ -5,11 +5,13 @@
  * bỏ hai cột Ngày và Tháng sinh:
  *   - tiêu đề bảng ở dòng 7, dữ liệu bắt đầu từ dòng 8
  *   - A STT | B Ngày đăng ký | C Họ tên | D Người đi kèm | E Lớp |
- *     F Số thành viên | G Tỉnh Thành (địa chỉ cũ) | H Năm sinh | I Giới tính |
- *     J CCCD/Hộ chiếu | K Số điện thoại | L Ghi chú
+ *     F Nhóm lớp | G Số thành viên | H Tỉnh Thành (địa chỉ cũ) | I Năm sinh |
+ *     J Giới tính | K CCCD/Hộ chiếu | L Số điện thoại | M Ghi chú
  *   - mỗi phiếu = 1 dòng bác sĩ + n dòng người đi kèm
- *   - cột D chỉ đánh số 1 cho người thân đi kèm; bác sĩ trong hội khóa
- *     đi cùng thì để trống, và có thêm Lớp ở cột E
+ *   - cột D ghi mối quan hệ của người thân đi kèm (vợ, con…); bác sĩ
+ *     trong hội khóa đi cùng thì để trống, và có Lớp riêng ở cột E
+ *   - cột F "Nhóm lớp" mang lớp của người đăng ký, lặp lại trên mọi
+ *     dòng của phiếu để gom nhóm cả đoàn
  *
  * Cách dùng: xem README.md ở thư mục gốc.
  */
@@ -18,20 +20,22 @@ var SHEET_NAME     = 'dang ky Hoi khoa Hue';
 var TITLE_TEXT     = 'Đăng ký Hội khóa Huế-2027';
 var HEADER_ROW     = 7;
 var FIRST_DATA_ROW = 8;
-var LAST_COL       = 12; // đến cột L
+var LAST_COL       = 13; // đến cột M
 
 var HEADERS = [
-  'STT', 'Ngày đăng ký', 'Họ tên', 'Người đi kèm', 'Lớp', 'Số thành viên',
-  'Tỉnh Thành (địa chỉ cũ)', 'Năm sinh', 'Giới tính', 'CCCD/ Hộ chiếu',
-  'Số điện thoại', 'Ghi chú'
+  'STT', 'Ngày đăng ký', 'Họ tên', 'Người đi kèm', 'Lớp', 'Nhóm lớp',
+  'Số thành viên', 'Tỉnh Thành (địa chỉ cũ)', 'Năm sinh', 'Giới tính',
+  'CCCD/ Hộ chiếu', 'Số điện thoại', 'Ghi chú'
 ];
 
-var COL_WIDTHS = [40, 105, 185, 55, 55, 55, 130, 65, 60, 115, 105, 230];
+var COL_WIDTHS = [40, 105, 185, 90, 55, 65, 55, 130, 65, 60, 115, 105, 230];
 
-var COL_SO_THANH_VIEN = 6;   // cột F — chỉ dòng bác sĩ đăng ký mới có
-var COL_GIOI_TINH     = 9;   // cột I
-var COL_CCCD          = 10;  // cột J — cùng cột SĐT giữ dạng chữ
-var COL_GHI_CHU       = 12;  // cột L
+var COL_TINH          = 8;   // cột H
+var COL_NAM_SINH      = 9;   // cột I
+var COL_SO_THANH_VIEN = 7;   // cột G — chỉ dòng bác sĩ đăng ký mới có
+var COL_GIOI_TINH     = 10;  // cột J
+var COL_CCCD          = 11;  // cột K — cùng cột SĐT giữ dạng chữ
+var COL_GHI_CHU       = 13;  // cột M
 
 // Giữ giống hệt danh sách trong assets/provinces.js
 var PROVINCES = [
@@ -103,6 +107,7 @@ function validate(p) {
       hoTen: ten,
       loai: str(n.loai) || 'Hội khóa',
       lop: str(n.lop),          // chỉ có với BS trong hội khóa
+      quanHe: str(n.quanHe),    // chỉ có với người thân đi kèm
       namSinh: num(n.namSinh),
       gioiTinh: str(n.gioiTinh),
       cccd: str(n.cccd)
@@ -142,19 +147,22 @@ function writeRegistration(d) {
 
     var rows = [];
 
-    // Dòng bác sĩ đăng ký
+    // Dòng bác sĩ đăng ký. Cột F "Nhóm lớp" chính là lớp của người này
+    // và được lặp lại y hệt trên mọi dòng của phiếu.
     rows.push([
-      stt, now, d.hoTen, '', d.lop, soThanhVien, d.tinh,
+      stt, now, d.hoTen, '', d.lop, d.lop, soThanhVien, d.tinh,
       d.namSinh, d.gioiTinh, d.cccd, d.sdt, d.ghiChu
     ]);
 
     // Các dòng người đi kèm.
-    // Cột D chỉ đánh số 1 cho người thân; bác sĩ trong hội khóa đi cùng
-    // để trống. Cột Ghi chú luôn để trống — chỉ dòng bác sĩ đăng ký mới
-    // mang nội dung do người dùng tự nhập.
+    // Cột D ghi mối quan hệ của người thân (vợ, con…); bác sĩ trong hội
+    // khóa đi cùng để trống cột này nhưng có lớp riêng ở cột E.
+    // Cột Ghi chú luôn để trống — chỉ dòng bác sĩ đăng ký mới mang nội
+    // dung do người dùng tự nhập.
     d.nguoiDiKem.forEach(function (n) {
       rows.push([
-        '', now, n.hoTen, n.loai === 'Gia đình' ? 1 : '', n.lop, '', '',
+        '', now, n.hoTen, n.loai === 'Gia đình' ? (n.quanHe || 1) : '',
+        n.lop, d.lop, '', '',
         n.namSinh, n.gioiTinh, n.cccd, '', ''
       ]);
     });
@@ -196,7 +204,7 @@ function countRegistrations_(sheet) {
 
 function formatRows_(sheet, startRow, count) {
   sheet.getRange(startRow, 2, count, 1).setNumberFormat('dd/mm/yyyy hh:mm');
-  sheet.getRange(startRow, 8, count, 1).setNumberFormat('0');   // năm sinh
+  sheet.getRange(startRow, COL_NAM_SINH, count, 1).setNumberFormat('0');
   sheet.getRange(startRow, COL_CCCD, count, 2).setNumberFormat('@'); // CCCD & SĐT giữ dạng chữ
   sheet.getRange(startRow, 1, count, LAST_COL)
        .setVerticalAlignment('middle')
@@ -269,5 +277,5 @@ function applyValidation_(sheet) {
   var tinh = SpreadsheetApp.newDataValidation()
     .requireValueInRange(sheet.getRange(FIRST_DATA_ROW, PROVINCE_COL, PROVINCES.length, 1), true)
     .setAllowInvalid(true).build();
-  sheet.getRange(FIRST_DATA_ROW, 7, n, 1).setDataValidation(tinh);
+  sheet.getRange(FIRST_DATA_ROW, COL_TINH, n, 1).setDataValidation(tinh);
 }

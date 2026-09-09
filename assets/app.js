@@ -54,19 +54,20 @@
     $('.c-hoTen', node).focus();
   }
 
-  /** Ô Lớp chỉ hiện khi người đi kèm là BS trong hội khóa. */
+  /**
+   * BS trong hội khóa thì hiện ô Lớp, người thân thì hiện ô Mối quan hệ.
+   * Ô nào bị ẩn sẽ xóa sạch giá trị để không lọt vào bảng tính.
+   */
   function syncLoai(row) {
     const checked = $('input[type="radio"]:checked', row);
     const laBacSi = !checked || checked.value === 'Hội khóa';
-    const lopWrap = $('[data-lop-wrap]', row);
-    lopWrap.hidden = !laBacSi;
-    // Quan hệ chiếm nửa hàng khi có ô Lớp bên cạnh, cả hàng khi không
-    $('[data-quanhe]', row).classList.toggle('span-4', !laBacSi);
-    if (!laBacSi) {
-      const lop = $('.c-lop', row);
-      lop.value = '';
-      setErr(lop, 'c-lop', '', row);
-    }
+
+    $('[data-lop-wrap]', row).hidden = !laBacSi;
+    $('[data-quanhe-wrap]', row).hidden = laBacSi;
+
+    const an = laBacSi ? $('.c-quanHe', row) : $('.c-lop', row);
+    an.value = '';
+    setErr(an, laBacSi ? 'c-quanHe' : 'c-lop', '', row);
   }
 
   function renumber() {
@@ -171,6 +172,11 @@
       if (laBacSi && !cLop)
         bad($('.c-lop', row), 'c-lop', `Nhập lớp cho người đi kèm thứ ${idx + 1}.`, row);
 
+      const cQuanHe = $('.c-quanHe', row).value.trim();
+      if (!laBacSi && !cQuanHe)
+        bad($('.c-quanHe', row), 'c-quanHe',
+            `Nhập mối quan hệ cho người đi kèm thứ ${idx + 1}.`, row);
+
       const cGt = $('.c-gioiTinh', row).value;
       if (!cGt) bad($('.c-gioiTinh', row), 'c-gioiTinh',
                     `Chọn giới tính cho người đi kèm thứ ${idx + 1}.`, row);
@@ -187,6 +193,7 @@
         hoTen: ten,
         loai: loai,
         lop: laBacSi ? cLop : '',
+        quanHe: laBacSi ? '' : cQuanHe,
         namSinh: cYear,
         gioiTinh: cGt,
         cccd: cId
@@ -271,7 +278,8 @@
     ];
     if (payload.nguoiDiKem.length) {
       rows.push(['Người đi kèm',
-        payload.nguoiDiKem.map(n => `${n.hoTen} (${n.loai})`).join(', ')]);
+        payload.nguoiDiKem.map(n =>
+          `${n.hoTen} (${n.lop ? 'BS lớp ' + n.lop : n.quanHe})`).join(', ')]);
     }
     if (payload.ghiChu) rows.push(['Ghi chú', payload.ghiChu]);
 

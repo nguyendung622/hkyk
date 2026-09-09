@@ -23,27 +23,32 @@ Trình duyệt (GitHub Pages)  ──POST JSON──>  Apps Script Web App  ─�
 ## Bố cục dữ liệu ghi ra Excel
 
 Sheet `dang ky Hoi khoa Hue`, tiêu đề ở dòng 7, dữ liệu từ dòng 8. Bố cục dựa
-trên `export.xlsm` nhưng **đã bỏ hai cột Ngày và Tháng sinh** — chỉ giữ Năm sinh.
+trên `export.xlsm` nhưng **đã bỏ hai cột Ngày/Tháng sinh** và **thêm cột Nhóm lớp**.
 
 | Cột | Nội dung | Dòng bác sĩ đăng ký | Dòng người đi kèm |
 |---|---|---|---|
 | A | STT | số thứ tự phiếu | để trống |
 | B | Ngày đăng ký | thời điểm gửi | thời điểm gửi |
 | C | Họ tên | họ tên bác sĩ | họ tên người đi kèm |
-| D | Người đi kèm | để trống | `1` nếu là **người thân**; để trống nếu là **bác sĩ trong hội khóa** |
-| E | Lớp | ✓ | lớp nếu là **BS khoá 86-92**; để trống nếu là người thân |
-| F | Số thành viên | 1 + số người đi kèm | để trống |
-| G | Tỉnh Thành (địa chỉ cũ) | ✓ | để trống |
-| H | Năm sinh | ✓ | ✓ |
-| I | Giới tính | ✓ (bắt buộc) | ✓ (bắt buộc) |
-| J | CCCD / Hộ chiếu | ✓ | ✓ |
-| K | Số điện thoại | ✓ | để trống |
-| L | Ghi chú | đúng nội dung người dùng gõ | **luôn để trống** |
+| D | Người đi kèm | để trống | **mối quan hệ** (Vợ, Con…) nếu là người thân; để trống nếu là BS khoá 86-92 |
+| E | Lớp | ✓ | lớp riêng nếu là **BS khoá 86-92**; để trống nếu là người thân |
+| F | Nhóm lớp | lớp của người đăng ký | **lớp của người đăng ký** (lặp lại trên mọi dòng của phiếu) |
+| G | Số thành viên | 1 + số người đi kèm | để trống |
+| H | Tỉnh Thành (địa chỉ cũ) | ✓ | để trống |
+| I | Năm sinh | ✓ | ✓ |
+| J | Giới tính | ✓ (bắt buộc) | ✓ (bắt buộc) |
+| K | CCCD / Hộ chiếu | ✓ | ✓ |
+| L | Số điện thoại | ✓ | để trống |
+| M | Ghi chú | đúng nội dung người dùng gõ | **luôn để trống** |
 
 Một phiếu = 1 dòng bác sĩ + n dòng người đi kèm ngay bên dưới.
 
-Vì bác sĩ trong hội khóa đi kèm cũng để trống cột D, mốc nhận biết đầu mỗi
-phiếu là **cột F "Số thành viên"** — chỉ dòng bác sĩ đăng ký mới có giá trị.
+Cột **F "Nhóm lớp"** dùng để gom cả đoàn của một người đăng ký về cùng một
+nhóm, kể cả người thân và bác sĩ khoá khác đi cùng.
+
+Mốc nhận biết đầu mỗi phiếu là **cột G "Số thành viên"** — chỉ dòng bác sĩ
+đăng ký mới có giá trị (cột D không dùng làm mốc được vì BS trong hội khóa
+đi kèm cũng để trống cột đó).
 
 ## Triển khai — 4 bước
 

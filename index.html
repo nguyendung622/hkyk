@@ -69,11 +69,26 @@
         </div>
 
         <div class="field span-4">
-          <label for="tinh">Nơi ở hiện nay (địa chỉ cũ) <span class="req">*</span></label>
+          <label for="tinh">Nơi ở hiện nay (Tỉnh thành trước sáp nhập) <span class="req">*</span></label>
           <input type="text" id="tinh" name="tinh" list="tinhList" required
                  autocomplete="off" placeholder="Chọn trong danh sách hoặc tự gõ">
           <datalist id="tinhList"></datalist>
           <p class="err" data-err-for="tinh"></p>
+        </div>
+
+        <div class="field">
+          <label for="namSinh">Năm sinh</label>
+          <input type="number" id="namSinh" name="namSinh" inputmode="numeric"
+                 min="1930" max="2030"
+                 placeholder="Yêu cầu nhập nếu BS sinh năm 1967 về trước">
+          <p class="err" data-err-for="namSinh"></p>
+        </div>
+
+        <div class="field">
+          <label for="cccd">CCCD / Hộ chiếu</label>
+          <input type="text" id="cccd" name="cccd" inputmode="numeric"
+                 placeholder="Yêu cầu nhập nếu BS sinh năm 1967 về trước">
+          <p class="err" data-err-for="cccd"></p>
         </div>
 
         <div class="field span-4">
@@ -84,37 +99,10 @@
       </div>
     </section>
 
-    <!-- ============ 2. THÔNG TIN BỔ SUNG ============ -->
+    <!-- ============ 2. NGƯỜI ĐI KÈM ============ -->
     <section class="card">
       <header class="card-head">
         <span class="step">2</span>
-        <div>
-          <h2>Thông tin bổ sung</h2>
-          <p class="hint">Yêu cầu với BS sinh năm 1967 về trước</p>
-        </div>
-      </header>
-
-      <div class="grid">
-        <div class="field">
-          <label for="namSinh">Năm sinh</label>
-          <input type="number" id="namSinh" name="namSinh" inputmode="numeric"
-                 min="1930" max="2030" placeholder="Ví dụ: 1967">
-          <p class="err" data-err-for="namSinh"></p>
-        </div>
-
-        <div class="field">
-          <label for="cccd">CCCD / Hộ chiếu</label>
-          <input type="text" id="cccd" name="cccd" inputmode="numeric"
-                 placeholder="12 số CCCD hoặc số hộ chiếu">
-          <p class="err" data-err-for="cccd"></p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 3. NGƯỜI ĐI KÈM ============ -->
-    <section class="card">
-      <header class="card-head">
-        <span class="step">3</span>
         <div>
           <h2>Danh sách người đi kèm</h2>
           <p class="hint">
@@ -133,7 +121,7 @@
       </button>
     </section>
 
-    <!-- ============ 4. GỬI ============ -->
+    <!-- ============ 3. GỬI ============ -->
     <section class="card summary-card">
       <div class="summary">
         <div>
@@ -166,6 +154,17 @@
 </footer>
 
 <!-- Khuôn mẫu một người đi kèm -->
+<datalist id="quanHeList">
+  <option value="Vợ"></option>
+  <option value="Chồng"></option>
+  <option value="Con"></option>
+  <option value="Con dâu"></option>
+  <option value="Con rể"></option>
+  <option value="Cháu"></option>
+  <option value="Anh/Chị/Em"></option>
+  <option value="Bạn"></option>
+</datalist>
+
 <template id="companionTpl">
   <article class="companion" data-companion>
     <header class="companion-head">
@@ -174,8 +173,8 @@
     </header>
 
     <div class="grid">
-      <div class="field" data-quanhe>
-        <label>Quan hệ <span class="req">*</span></label>
+      <div class="field">
+        <label>Người đi kèm là <span class="req">*</span></label>
         <div class="radios">
           <label class="radio">
             <input type="radio" name="loai-__I__" value="Hội khóa" checked>
@@ -192,6 +191,13 @@
         <label>Lớp <span class="req">*</span></label>
         <input type="text" class="c-lop" placeholder="A - B - C - D">
         <p class="err" data-err-for="c-lop"></p>
+      </div>
+
+      <div class="field" data-quanhe-wrap>
+        <label>Mối quan hệ <span class="req">*</span></label>
+        <input type="text" class="c-quanHe" list="quanHeList"
+               autocomplete="off" placeholder="Vợ, chồng, con…">
+        <p class="err" data-err-for="c-quanHe"></p>
       </div>
 
       <div class="field">
