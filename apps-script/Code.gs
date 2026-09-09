@@ -8,6 +8,7 @@
  *     F Nhóm lớp | G Số thành viên | H Tỉnh Thành (địa chỉ cũ) | I Năm sinh |
  *     J Giới tính | K CCCD/Hộ chiếu | L Số điện thoại | M Ghi chú
  *   - mỗi phiếu = 1 dòng bác sĩ + n dòng người đi kèm
+ *   - cột A đánh số thứ tự liên tục cho mọi dòng, không bỏ trống
  *   - cột D ghi mối quan hệ của người thân đi kèm (vợ, con…); bác sĩ
  *     trong hội khóa đi cùng thì để trống, và có Lớp riêng ở cột E
  *   - cột F "Nhóm lớp" mang lớp của người đăng ký, lặp lại trên mọi
@@ -141,7 +142,7 @@ function writeRegistration(d) {
   try {
     var sheet = getSheet_();
     var startRow = nextRow_(sheet);
-    var stt = countRegistrations_(sheet) + 1;
+    var soPhieu = countRegistrations_(sheet) + 1;
     var now = new Date();
     var soThanhVien = 1 + d.nguoiDiKem.length;
 
@@ -149,8 +150,9 @@ function writeRegistration(d) {
 
     // Dòng bác sĩ đăng ký. Cột F "Nhóm lớp" chính là lớp của người này
     // và được lặp lại y hệt trên mọi dòng của phiếu.
+    // Cột A để tạm rỗng, sẽ đánh số ở dưới.
     rows.push([
-      stt, now, d.hoTen, '', d.lop, d.lop, soThanhVien, d.tinh,
+      '', now, d.hoTen, '', d.lop, d.lop, soThanhVien, d.tinh,
       d.namSinh, d.gioiTinh, d.cccd, d.sdt, d.ghiChu
     ]);
 
@@ -167,10 +169,16 @@ function writeRegistration(d) {
       ]);
     });
 
+    // Cột A đánh số thứ tự cho MỌI dòng, tăng dần liên tục theo vị trí
+    // dòng trong bảng — dòng người đi kèm cũng có số, không bỏ trống.
+    rows.forEach(function (r, i) {
+      r[0] = startRow + i - FIRST_DATA_ROW + 1;
+    });
+
     sheet.getRange(startRow, 1, rows.length, LAST_COL).setValues(rows);
     formatRows_(sheet, startRow, rows.length);
     SpreadsheetApp.flush();
-    return stt;
+    return soPhieu;
   } finally {
     lock.releaseLock();
   }

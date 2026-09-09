@@ -27,7 +27,7 @@ trên `export.xlsm` nhưng **đã bỏ hai cột Ngày/Tháng sinh** và **thêm
 
 | Cột | Nội dung | Dòng bác sĩ đăng ký | Dòng người đi kèm |
 |---|---|---|---|
-| A | STT | số thứ tự phiếu | để trống |
+| A | STT | số thứ tự dòng | số thứ tự dòng (mọi dòng đều có số, tăng dần liên tục) |
 | B | Ngày đăng ký | thời điểm gửi | thời điểm gửi |
 | C | Họ tên | họ tên bác sĩ | họ tên người đi kèm |
 | D | Người đi kèm | để trống | **mối quan hệ** (Vợ, Con…) nếu là người thân; để trống nếu là BS khoá 86-92 |
