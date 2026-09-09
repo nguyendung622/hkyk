@@ -27,7 +27,7 @@
   $('#formTitle').textContent = CONFIG.FORM_TITLE;
 
   const QUAN_HE = ['Vợ', 'Chồng', 'Con', 'Con dâu', 'Con rể', 'Cháu',
-                  'Anh/Chị/Em', 'Bạn'];
+                  'Anh/Chị/Em', 'Bạn', 'Bạn cùng khóa'];
 
   /** Bỏ dấu để gõ "dak lak" vẫn tìm ra "Đắk Lắk". */
   function khongDau(v) {
@@ -153,19 +153,22 @@
   }
 
   /**
-   * BS trong hội khóa thì hiện ô Lớp, người thân thì hiện ô Mối quan hệ.
-   * Ô nào bị ẩn sẽ xóa sạch giá trị để không lọt vào bảng tính.
+   * Ô Mối quan hệ luôn hiện. Ô Lớp chỉ hiện với BS trong hội khóa, và
+   * khi đó nhóm nút chọn giãn ra cả hàng để lưới không hở ô trống.
+   * Ô Lớp bị ẩn thì xóa sạch giá trị để không lọt vào bảng tính.
    */
   function syncLoai(row) {
     const checked = $('input[type="radio"]:checked', row);
     const laBacSi = !checked || checked.value === 'Hội khóa';
 
     $('[data-lop-wrap]', row).hidden = !laBacSi;
-    $('[data-quanhe-wrap]', row).hidden = laBacSi;
+    $('[data-loai-wrap]', row).classList.toggle('span-4', laBacSi);
 
-    const an = laBacSi ? $('.c-quanHe', row) : $('.c-lop', row);
-    an.value = '';
-    setErr(an, laBacSi ? 'c-quanHe' : 'c-lop', '', row);
+    if (!laBacSi) {
+      const lop = $('.c-lop', row);
+      lop.value = '';
+      setErr(lop, 'c-lop', '', row);
+    }
   }
 
   function renumber() {
@@ -271,7 +274,7 @@
         bad($('.c-lop', row), 'c-lop', `Nhập lớp cho người đi kèm thứ ${idx + 1}.`, row);
 
       const cQuanHe = $('.c-quanHe', row).value.trim();
-      if (!laBacSi && !cQuanHe)
+      if (!cQuanHe)
         bad($('.c-quanHe', row), 'c-quanHe',
             `Nhập mối quan hệ cho người đi kèm thứ ${idx + 1}.`, row);
 
@@ -291,7 +294,7 @@
         hoTen: ten,
         loai: loai,
         lop: laBacSi ? cLop : '',
-        quanHe: laBacSi ? '' : cQuanHe,
+        quanHe: cQuanHe,
         namSinh: cYear,
         gioiTinh: cGt,
         cccd: cId
@@ -377,7 +380,8 @@
     if (payload.nguoiDiKem.length) {
       rows.push(['Người đi kèm',
         payload.nguoiDiKem.map(n =>
-          `${n.hoTen} (${n.lop ? 'BS lớp ' + n.lop : n.quanHe})`).join(', ')]);
+          `${n.hoTen} (${n.lop ? 'BS lớp ' + n.lop + ' — ' : ''}${n.quanHe})`)
+          .join(', ')]);
     }
     if (payload.ghiChu) rows.push(['Ghi chú', payload.ghiChu]);
 

@@ -30,11 +30,11 @@ trên `export.xlsm` nhưng **đã bỏ hai cột Ngày/Tháng sinh** và **thêm
 | A | STT | số thứ tự dòng | số thứ tự dòng (mọi dòng đều có số, tăng dần liên tục) |
 | B | Ngày đăng ký | thời điểm gửi | thời điểm gửi |
 | C | Họ tên | họ tên bác sĩ | họ tên người đi kèm |
-| D | Người đi kèm | để trống | **mối quan hệ** (Vợ, Con…) nếu là người thân; để trống nếu là BS khoá 86-92 |
+| D | Người đi kèm | để trống | **mối quan hệ** với người đăng ký (Vợ, Con, Bạn cùng khóa…) — cả hai loại người đi kèm đều có |
 | E | Lớp | ✓ | lớp riêng nếu là **BS khoá 86-92**; để trống nếu là người thân |
 | F | Nhóm lớp | lớp của người đăng ký | **lớp của người đăng ký** (lặp lại trên mọi dòng của phiếu) |
 | G | Số thành viên | 1 + số người đi kèm | để trống |
-| H | Tỉnh Thành (địa chỉ cũ) | ✓ | để trống |
+| H | Nơi ở hiện nay (Tỉnh thành trước sáp nhập) | ✓ | để trống |
 | I | Năm sinh | ✓ | ✓ |
 | J | Giới tính | ✓ (bắt buộc) | ✓ (bắt buộc) |
 | K | CCCD / Hộ chiếu | ✓ | ✓ |

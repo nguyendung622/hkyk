@@ -9,8 +9,9 @@
  *     J Giới tính | K CCCD/Hộ chiếu | L Số điện thoại | M Ghi chú
  *   - mỗi phiếu = 1 dòng bác sĩ + n dòng người đi kèm
  *   - cột A đánh số thứ tự liên tục cho mọi dòng, không bỏ trống
- *   - cột D ghi mối quan hệ của người thân đi kèm (vợ, con…); bác sĩ
- *     trong hội khóa đi cùng thì để trống, và có Lớp riêng ở cột E
+ *   - cột D ghi mối quan hệ của người đi kèm với người đăng ký
+ *     (vợ, con, bạn cùng khóa…); bác sĩ trong hội khóa đi cùng còn có
+ *     Lớp riêng ở cột E, đó cũng là cách nhận ra họ
  *   - cột F "Nhóm lớp" mang lớp của người đăng ký, lặp lại trên mọi
  *     dòng của phiếu để gom nhóm cả đoàn
  *
@@ -25,7 +26,7 @@ var LAST_COL       = 13; // đến cột M
 
 var HEADERS = [
   'STT', 'Ngày đăng ký', 'Họ tên', 'Người đi kèm', 'Lớp', 'Nhóm lớp',
-  'Số thành viên', 'Tỉnh Thành (địa chỉ cũ)', 'Năm sinh', 'Giới tính',
+  'Số thành viên', 'Nơi ở hiện nay (Tỉnh thành trước sáp nhập)', 'Năm sinh', 'Giới tính',
   'CCCD/ Hộ chiếu', 'Số điện thoại', 'Ghi chú'
 ];
 
@@ -157,13 +158,14 @@ function writeRegistration(d) {
     ]);
 
     // Các dòng người đi kèm.
-    // Cột D ghi mối quan hệ của người thân (vợ, con…); bác sĩ trong hội
-    // khóa đi cùng để trống cột này nhưng có lớp riêng ở cột E.
+    // Cột D ghi mối quan hệ với người đăng ký (vợ, con, bạn cùng khóa…)
+    // cho cả hai loại người đi kèm. Muốn biết ai là BS trong hội khóa
+    // thì xem cột E "Lớp" — chỉ họ mới có lớp riêng.
     // Cột Ghi chú luôn để trống — chỉ dòng bác sĩ đăng ký mới mang nội
     // dung do người dùng tự nhập.
     d.nguoiDiKem.forEach(function (n) {
       rows.push([
-        '', now, n.hoTen, n.loai === 'Gia đình' ? (n.quanHe || 1) : '',
+        '', now, n.hoTen, n.quanHe || (n.loai === 'Gia đình' ? 1 : ''),
         n.lop, d.lop, '', '',
         n.namSinh, n.gioiTinh, n.cccd, '', ''
       ]);
