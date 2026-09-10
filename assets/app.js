@@ -26,8 +26,7 @@
   document.title = CONFIG.FORM_TITLE + ' — Đăng ký tham dự';
   $('#formTitle').textContent = CONFIG.FORM_TITLE;
 
-  const QUAN_HE = ['Vợ', 'Chồng', 'Con', 'Con dâu', 'Con rể', 'Cháu',
-                  'Anh/Chị/Em', 'Bạn', 'Bạn cùng khóa'];
+  const QUAN_HE = ['Vợ', 'Chồng', 'Con', 'ACE', 'Bạn', 'Khác'];
 
   /** Bỏ dấu để gõ "dak lak" vẫn tìm ra "Đắk Lắk". */
   function khongDau(v) {
